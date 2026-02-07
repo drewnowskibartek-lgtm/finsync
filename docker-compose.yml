@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: budget_saas_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: budget_saas
+    ports:
+      - "5434:5432"
+    volumes:
+      - budget_saas_pg:/var/lib/postgresql/data
+
+volumes:
+  budget_saas_pg:
