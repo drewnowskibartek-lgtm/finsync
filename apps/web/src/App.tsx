@@ -6,6 +6,9 @@ import { AppShell } from './layouts/AppShell';
 const Login = React.lazy(() =>
   import('./pages/Login').then((m) => ({ default: m.Login })),
 );
+const Landing = React.lazy(() =>
+  import('./pages/Landing').then((m) => ({ default: m.Landing })),
+);
 const Dashboard = React.lazy(() =>
   import('./pages/Dashboard').then((m) => ({ default: m.Dashboard })),
 );
@@ -49,6 +52,7 @@ export const App: React.FC = () => {
     <AuthProvider>
       <Suspense fallback={null}>
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Navigate to="/login" replace />} />
           <Route
@@ -76,7 +80,7 @@ export const App: React.FC = () => {
               </Protected>
             }
           />
-          <Route path="*" element={<Navigate to="/app/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </AuthProvider>
