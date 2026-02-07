@@ -1,0 +1,1 @@
+import{r as t,h as o}from"./index-BWONGnEN.js";const c=()=>{const[a,s]=t.useState(null),[e,n]=t.useState(!0);return t.useEffect(()=>{o.get("/subscriptions/status").then(u=>s(u.data)).catch(()=>s(null)).finally(()=>n(!1))},[]),{data:a,loading:e}};export{c as u};

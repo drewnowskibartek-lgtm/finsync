@@ -1,0 +1,184 @@
+// Prisma schema dla Budget SaaS
+// Wszystkie nazwy i komentarze po polsku
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rola {
+  ADMIN
+  USER
+  VIEWER
+}
+
+enum Plan {
+  FREE
+  PRO
+}
+
+enum StatusSubskrypcji {
+  AKTYWNA
+  WSTRZYMANA
+  ANULOWANA
+  BRAK
+}
+
+enum Czestotliwosc {
+  DZIENNA
+  TYGODNIOWA
+  MIESIECZNA
+  ROCZNA
+}
+
+model Uzytkownik {
+  id              String          @id @default(cuid())
+  email           String          @unique
+  hasloHash       String
+  rola            Rola            @default(USER)
+  zablokowany     Boolean         @default(false)
+  utworzono       DateTime        @default(now())
+  zaktualizowano  DateTime        @updatedAt
+
+  transakcje      Transakcja[]
+  kategorie       Kategoria[]
+  budzety         Budzet[]
+  recurring       Recurring[]
+  auditLogi       AuditLog[]
+  subskrypcja     Subskrypcja?
+  aiUzycie        AiUzycie[]
+}
+
+model Transakcja {
+  id               String     @id @default(cuid())
+  userId           String
+  data             DateTime
+  kwota            Decimal    @db.Decimal(14, 2)
+  waluta           String     @default("PLN")
+  odbiorca         String
+  referencja       String?
+  kategoriaId      String?
+  metoda           String?
+  notatka          String?
+  utworzonoPrzez   String
+  czyUzgodnione    Boolean    @default(false)
+  flagaDuplikatu   Boolean    @default(false)
+  utworzono        DateTime   @default(now())
+  zaktualizowano   DateTime   @updatedAt
+
+  uzytkownik       Uzytkownik @relation(fields: [userId], references: [id])
+  kategoria        Kategoria? @relation(fields: [kategoriaId], references: [id])
+
+  @@index([userId])
+  @@index([data])
+}
+
+model Kategoria {
+  id             String       @id @default(cuid())
+  nazwa          String
+  globalna       Boolean      @default(false)
+  userId         String?
+  utworzono      DateTime     @default(now())
+
+  uzytkownik     Uzytkownik?  @relation(fields: [userId], references: [id])
+  transakcje     Transakcja[]
+  budzety        Budzet[]
+  recurring      Recurring[]
+
+  @@index([userId])
+}
+
+model Budzet {
+  id           String     @id @default(cuid())
+  userId       String
+  kategoriaId  String
+  rok          Int
+  miesiac      Int
+  kwota        Decimal    @db.Decimal(14, 2)
+  roluj        Boolean    @default(false)
+  utworzono    DateTime   @default(now())
+
+  uzytkownik   Uzytkownik @relation(fields: [userId], references: [id])
+  kategoria    Kategoria @relation(fields: [kategoriaId], references: [id])
+
+  @@unique([userId, kategoriaId, rok, miesiac])
+  @@index([userId])
+}
+
+model Recurring {
+  id            String       @id @default(cuid())
+  userId        String
+  kwota         Decimal      @db.Decimal(14, 2)
+  kategoriaId   String?
+  odbiorca      String
+  metoda        String?
+  notatka       String?
+  czestotliwosc Czestotliwosc
+  nastepnaData  DateTime
+  aktywna       Boolean      @default(true)
+  utworzono     DateTime     @default(now())
+
+  uzytkownik   Uzytkownik   @relation(fields: [userId], references: [id])
+  kategoria    Kategoria?   @relation(fields: [kategoriaId], references: [id])
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id            String     @id @default(cuid())
+  userId        String
+  transakcjaId  String?
+  akcja         String
+  notatka       String?
+  timestamp     DateTime   @default(now())
+
+  uzytkownik    Uzytkownik @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Subskrypcja {
+  id                    String              @id @default(cuid())
+  userId                String              @unique
+  plan                  Plan                @default(FREE)
+  status                StatusSubskrypcji   @default(BRAK)
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  currentPeriodEnd      DateTime?
+  utworzono             DateTime            @default(now())
+  zaktualizowano        DateTime            @updatedAt
+
+  uzytkownik            Uzytkownik          @relation(fields: [userId], references: [id])
+}
+
+model PlanKonfiguracja {
+  id              String   @id @default(cuid())
+  plan            Plan     @unique
+  stripePriceId   String
+  aktywny         Boolean  @default(true)
+  utworzono       DateTime @default(now())
+}
+
+model LogSystemowy {
+  id         String   @id @default(cuid())
+  poziom     String
+  wiadomosc  String
+  utworzono  DateTime @default(now())
+}
+
+model AiUzycie {
+  id        String     @id @default(cuid())
+  userId    String
+  data      DateTime
+  licznik   Int        @default(0)
+  utworzono DateTime   @default(now())
+
+  uzytkownik Uzytkownik @relation(fields: [userId], references: [id])
+
+  @@unique([userId, data])
+  @@index([userId])
+}

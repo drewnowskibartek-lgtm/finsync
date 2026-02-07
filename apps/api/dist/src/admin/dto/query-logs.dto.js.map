@@ -1,0 +1,1 @@
+{"version":3,"file":"query-logs.dto.js","sourceRoot":"","sources":["../../../../src/admin/dto/query-logs.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAAuD;AAEvD,MAAa,YAAY;CAQxB;AARD,oCAQC;AALC;IAFC,IAAA,4BAAU,GAAE;IACZ,IAAA,0BAAQ,EAAC,EAAE,OAAO,EAAE,0BAA0B,EAAE,CAAC;;4CAClC;AAIhB;IAFC,IAAA,4BAAU,GAAE;IACZ,IAAA,0BAAQ,EAAC,EAAE,OAAO,EAAE,gCAAgC,EAAE,CAAC;;6CACvC"}

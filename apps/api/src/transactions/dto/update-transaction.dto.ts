@@ -1,0 +1,52 @@
+import {
+  IsBoolean,
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class UpdateTransactionDto {
+  @IsOptional()
+  @IsDateString({}, { message: 'Podaj poprawną datę.' })
+  data?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({}, { message: 'Kwota musi być liczbą.' })
+  kwota?: number;
+
+  @IsOptional()
+  @IsString({ message: 'Waluta musi być tekstem.' })
+  @MinLength(3, { message: 'Waluta musi mieć 3 znaki.' })
+  @MaxLength(3, { message: 'Waluta musi mieć 3 znaki.' })
+  waluta?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Odbiorca musi być tekstem.' })
+  @MinLength(2, { message: 'Odbiorca musi mieć co najmniej 2 znaki.' })
+  odbiorca?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Referencja musi być tekstem.' })
+  referencja?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Kategoria musi być tekstem.' })
+  kategoriaId?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Metoda musi być tekstem.' })
+  metoda?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Notatka musi być tekstem.' })
+  notatka?: string;
+
+  @IsOptional()
+  @IsBoolean({ message: 'Czy uzgodnione musi być wartością logiczną.' })
+  czyUzgodnione?: boolean;
+}
