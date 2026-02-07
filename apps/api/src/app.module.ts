@@ -17,6 +17,7 @@ import { AdminModule } from './admin/admin.module';
 import { HealthModule } from './health/health.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { AiModule } from './ai/ai.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AiModule } from './ai/ai.module';
     AdminModule,
     AiModule,
     HealthModule,
+    SeedModule,
   ],
   providers: [
     {
