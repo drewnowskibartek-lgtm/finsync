@@ -6,3 +6,5 @@ apps/web/dist
 .env.*
 *.log
 .tmp*
+POWROT_DO_APLIKACJI.md
+_deploy.tar
