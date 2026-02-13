@@ -9,5 +9,13 @@ if [ ! -d "$ROOT_DIR/.git" ]; then
 fi
 
 cd "$ROOT_DIR"
-git pull
+
+git fetch origin
+if git show-ref --verify --quiet refs/heads/main; then
+  git checkout main
+else
+  git checkout -b main
+fi
+
+git reset --hard origin/main
 sudo docker-compose up -d --build
