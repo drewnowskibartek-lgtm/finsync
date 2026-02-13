@@ -18,4 +18,4 @@ else
 fi
 
 git reset --hard origin/main
-sudo docker-compose up -d --build
+sudo docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans
