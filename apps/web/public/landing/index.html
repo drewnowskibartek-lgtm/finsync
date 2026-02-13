@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LifeSync Lab</title>
+    <style>
+      :root {
+        --bg: #0b0f14;
+        --panel: #111821;
+        --text: #e6edf3;
+        --muted: #94a3b8;
+        --accent: #22d3ee;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+        background: radial-gradient(1200px 800px at 20% -10%, #16212b 0%, #0b0f14 60%) no-repeat;
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+      }
+      .wrap {
+        width: min(980px, 100%);
+      }
+      .hero {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+      }
+      .hero img {
+        width: 96px;
+        height: 96px;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 32px;
+        letter-spacing: 0.5px;
+      }
+      .hero p {
+        margin: 6px 0 0;
+        color: var(--muted);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .card {
+        background: linear-gradient(180deg, #0f1720 0%, #0b1118 100%);
+        border: 1px solid #1f2a36;
+        border-radius: 16px;
+        padding: 20px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: #2c3b4c;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      }
+      .card img {
+        width: 100%;
+        max-height: 80px;
+        object-fit: contain;
+        margin-bottom: 12px;
+      }
+      .card span {
+        display: block;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      @media (max-width: 900px) {
+        .grid { grid-template-columns: 1fr; }
+        .hero { flex-direction: column; text-align: center; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="hero">
+        <img src="/lifesync_logo.svg" alt="LifeSync Lab" />
+        <div>
+          <h1>LifeSync Lab</h1>
+          <p>Wybierz produkt</p>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="/baysyn/">
+          <img src="/baysync_logo.svg" alt="BaySync" />
+          <span>BaySync – wkrótce</span>
+        </a>
+        <a class="card" href="/finsync/">
+          <img src="/finsync_logo.svg" alt="FinSync" />
+          <span>FinSync – aplikacja budżetowa</span>
+        </a>
+        <a class="card" href="/crmsync/">
+          <img src="/crmsync_logo.svg" alt="CRMSync" />
+          <span>CRMSync – wkrótce</span>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
