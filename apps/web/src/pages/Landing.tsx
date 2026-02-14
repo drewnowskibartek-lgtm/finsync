@@ -154,7 +154,6 @@ export const Landing: React.FC = () => {
               <Box
                 sx={{
                   p: { xs: 2, md: 3 },
-                  background: '#fff',
                   borderRadius: 3,
                   border: '1px solid rgba(10,37,64,0.08)',
                   background:
@@ -175,13 +174,13 @@ export const Landing: React.FC = () => {
                 </Typography>
                 <Stack spacing={1}>
                   <Typography sx={{ color: '#455a64' }}>
-                    ? Jeden pulpit z kluczowymi liczbami
+                    - Jeden pulpit z kluczowymi liczbami
                   </Typography>
                   <Typography sx={{ color: '#455a64' }}>
-                    ? Bud?ety, limity i szybkie alerty
+                    - Budzety, limity i szybkie alerty
                   </Typography>
                   <Typography sx={{ color: '#455a64' }}>
-                    ? Raporty miesi?czne i trendy
+                    - Raporty miesieczne i trendy
                   </Typography>
                 </Stack>
               </Box>
@@ -193,27 +192,27 @@ export const Landing: React.FC = () => {
           {[
             {
               title: 'Przejrzysty dashboard',
-              desc: 'Przychody, wydatki, saldo i trend 12 miesięcy w jednym widoku.',
+              desc: 'Przychody, wydatki, saldo i trend 12 miesiecy w jednym widoku.',
             },
             {
-              title: 'Transakcje pod kontrolą',
-              desc: 'Dodawanie, filtrowanie, wykrywanie duplikatów i pełna historia.',
+              title: 'Transakcje pod kontrola',
+              desc: 'Dodawanie, filtrowanie, wykrywanie duplikatow i pelna historia.',
             },
             {
-              title: 'Budżety i rolowanie',
-              desc: 'Ustaw limity, obserwuj wykorzystanie i przenoś niewykorzystane środki.',
+              title: 'Budzety i rolowanie',
+              desc: 'Ustaw limity, obserwuj wykorzystanie i przenos niewykorzystane srodki.',
             },
             {
               title: 'Asystent AI',
-              desc: 'Analiza paragonów, podsumowania i wsparcie w obsłudze aplikacji.',
+              desc: 'Analiza paragonow, podsumowania i wsparcie w obsludze aplikacji.',
             },
             {
-              title: 'Plany i uprawnienia',
-              desc: 'Free/Pro, role użytkowników i bezpieczna izolacja danych.',
+              title: 'Cele i oszczednosci',
+              desc: 'Tworz cele, sledz postep i planuj wieksze wydatki.',
             },
             {
-              title: 'Raporty i eksport',
-              desc: 'Raporty miesięczne oraz eksport do CSV/Excel.',
+              title: 'Powiadomienia i przypomnienia',
+              desc: 'Alerty o limitach, budzetach i cyklicznych platnosciach.',
             },
           ].map((item) => (
             <Grid key={item.title} item xs={12} md={6} lg={4}>
@@ -246,27 +245,35 @@ export const Landing: React.FC = () => {
           {[
             {
               value: '12+',
-              label: 'miesięcy trendów w dashboardzie',
+              label: 'miesiecy trendow w dashboardzie',
             },
             {
-              value: '0 zł',
-              label: 'ukrytych kosztów w planie Free',
+              value: 'Automatycznie',
+              label: 'kategoryzacja i reguly transakcji',
             },
             {
-              value: '3',
-              label: 'role użytkowników i pełna kontrola dostępu',
+              value: 'Alerty',
+              label: 'limity budzetow i przypomnienia',
             },
             {
-              value: '1 klik',
-              label: 'eksport raportów do CSV/Excel',
+              value: 'Cele',
+              label: 'oszczednosci i wieksze wydatki',
             },
-          ].map((stat) => (
+          ]].map((stat) => (
             <Grid key={stat.label} item xs={12} sm={6} md={3}>
               <Card
                 sx={{
                   p: 2.5,
                   textAlign: 'center',
                   border: '1px solid rgba(10,37,64,0.08)',
+                  background:
+                    'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(246,249,252,0.95) 100%)',
+                  boxShadow: '0 10px 24px rgba(10,37,64,0.12)',
+                  transition: 'transform 180ms ease, box-shadow 180ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 18px 44px rgba(10,37,64,0.18)',
+                  },
                 }}
               >
                 <Typography
