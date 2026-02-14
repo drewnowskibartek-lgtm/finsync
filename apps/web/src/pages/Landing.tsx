@@ -30,6 +30,38 @@ export const Landing: React.FC = () => {
         minHeight: '100vh',
         background:
           'linear-gradient(135deg, rgba(21,101,192,0.12) 0%, rgba(46,214,161,0.12) 50%, rgba(10,37,64,0.12) 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: '-15%',
+          right: '-10%',
+          width: { xs: 280, md: 420 },
+          height: { xs: 280, md: 420 },
+          background:
+            'radial-gradient(circle, rgba(46,214,161,0.18) 0%, rgba(46,214,161,0) 70%)',
+          filter: 'blur(8px)',
+          animation: 'float 10s ease-in-out infinite',
+          zIndex: 0,
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          bottom: '-20%',
+          left: '-10%',
+          width: { xs: 240, md: 360 },
+          height: { xs: 240, md: 360 },
+          background:
+            'radial-gradient(circle, rgba(21,101,192,0.20) 0%, rgba(21,101,192,0) 70%)',
+          filter: 'blur(8px)',
+          animation: 'float 12s ease-in-out infinite reverse',
+          zIndex: 0,
+        },
+        '@keyframes float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(18px)' },
+        },
       }}
     >
       <Box
@@ -67,7 +99,10 @@ export const Landing: React.FC = () => {
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
+      <Container
+        maxWidth="lg"
+        sx={{ py: { xs: 6, md: 10 }, position: 'relative', zIndex: 1 }}
+      >
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={6}>
             <Typography
@@ -122,6 +157,14 @@ export const Landing: React.FC = () => {
                   background: '#fff',
                   borderRadius: 3,
                   border: '1px solid rgba(10,37,64,0.08)',
+                  background:
+                    'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(246,249,252,0.95) 100%)',
+                  boxShadow: '0 10px 24px rgba(10,37,64,0.12)',
+                  transition: 'transform 180ms ease, box-shadow 180ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 18px 44px rgba(10,37,64,0.18)',
+                  },
                 }}
               >
                 <Typography
@@ -132,16 +175,13 @@ export const Landing: React.FC = () => {
                 </Typography>
                 <Stack spacing={1}>
                   <Typography sx={{ color: '#455a64' }}>
-                    • Jeden pulpit z kluczowymi liczbami
+                    ? Jeden pulpit z kluczowymi liczbami
                   </Typography>
                   <Typography sx={{ color: '#455a64' }}>
-                    • Budżety, limity i szybkie alerty
+                    ? Bud?ety, limity i szybkie alerty
                   </Typography>
                   <Typography sx={{ color: '#455a64' }}>
-                    • Raporty miesięczne i trendy
-                  </Typography>
-                  <Typography sx={{ color: '#455a64' }}>
-                    • Bezpieczny dostęp i role użytkowników
+                    ? Raporty miesi?czne i trendy
                   </Typography>
                 </Stack>
               </Box>
@@ -182,7 +222,12 @@ export const Landing: React.FC = () => {
                   p: 2.5,
                   height: '100%',
                   border: '1px solid rgba(10,37,64,0.08)',
-                  boxShadow: '0 8px 20px rgba(10,37,64,0.08)',
+                  boxShadow: '0 8px 24px rgba(10,37,64,0.10)',
+                  transition: 'transform 180ms ease, box-shadow 180ms ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 16px 40px rgba(10,37,64,0.18)',
+                  },
                 }}
               >
                 <Typography
