@@ -177,10 +177,10 @@ export const Landing: React.FC = () => {
                     - Jeden pulpit z kluczowymi liczbami
                   </Typography>
                   <Typography sx={{ color: '#455a64' }}>
-                    - Budzety, limity i szybkie alerty
+                    - Budżety, limity i szybkie alerty
                   </Typography>
                   <Typography sx={{ color: '#455a64' }}>
-                    - Raporty miesieczne i trendy
+                    - Raporty miesięczne i trendy
                   </Typography>
                 </Stack>
               </Box>
@@ -192,27 +192,27 @@ export const Landing: React.FC = () => {
           {[
             {
               title: 'Przejrzysty dashboard',
-              desc: 'Przychody, wydatki, saldo i trend 12 miesiecy w jednym widoku.',
+              desc: 'Przychody, wydatki, saldo i trend 12 miesięcy w jednym widoku.',
             },
             {
-              title: 'Transakcje pod kontrola',
-              desc: 'Dodawanie, filtrowanie, wykrywanie duplikatow i pelna historia.',
+              title: 'Transakcje pod kontrolą',
+              desc: 'Dodawanie, filtrowanie, wykrywanie duplikatów i pełna historia.',
             },
             {
-              title: 'Budzety i rolowanie',
-              desc: 'Ustaw limity, obserwuj wykorzystanie i przenos niewykorzystane srodki.',
+              title: 'Budżety i rolowanie',
+              desc: 'Ustaw limity, obserwuj wykorzystanie i przenoś niewykorzystane środki.',
             },
             {
               title: 'Asystent AI',
-              desc: 'Analiza paragonow, podsumowania i wsparcie w obsludze aplikacji.',
+              desc: 'Analiza paragonów, podsumowania i wsparcie w obsłudze aplikacji.',
             },
             {
-              title: 'Cele i oszczednosci',
-              desc: 'Tworz cele, sledz postep i planuj wieksze wydatki.',
+              title: 'Cele i oszczędności',
+              desc: 'Twórz cele, śledź postęp i planuj większe wydatki.',
             },
             {
               title: 'Powiadomienia i przypomnienia',
-              desc: 'Alerty o limitach, budzetach i cyklicznych platnosciach.',
+              desc: 'Alerty o limitach, budżetach i cyklicznych płatnościach.',
             },
           ].map((item) => (
             <Grid key={item.title} item xs={12} md={6} lg={4}>
@@ -222,7 +222,33 @@ export const Landing: React.FC = () => {
                   height: '100%',
                   border: '1px solid rgba(10,37,64,0.08)',
                   boxShadow: '0 8px 24px rgba(10,37,64,0.10)',
+                  position: 'relative',
+                  overflow: 'hidden',
                   transition: 'transform 180ms ease, box-shadow 180ms ease',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: -18,
+                    right: -18,
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    background:
+                      'radial-gradient(circle, rgba(46,214,161,0.35) 0%, rgba(46,214,161,0) 70%)',
+                    opacity: 0.9,
+                  },
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: -22,
+                    left: -22,
+                    width: 80,
+                    height: 80,
+                    borderRadius: '50%',
+                    background:
+                      'radial-gradient(circle, rgba(21,101,192,0.22) 0%, rgba(21,101,192,0) 70%)',
+                    opacity: 0.8,
+                  },
                   '&:hover': {
                     transform: 'translateY(-4px)',
                     boxShadow: '0 16px 40px rgba(10,37,64,0.18)',
@@ -245,19 +271,19 @@ export const Landing: React.FC = () => {
           {[
             {
               value: '12+',
-              label: 'miesiecy trendow w dashboardzie',
+              label: 'miesięcy trendów w dashboardzie',
             },
             {
               value: 'Automatycznie',
-              label: 'kategoryzacja i reguly transakcji',
+              label: 'kategoryzacja i reguły transakcji',
             },
             {
               value: 'Alerty',
-              label: 'limity budzetow i przypomnienia',
+              label: 'limity budżetów i przypomnienia',
             },
             {
               value: 'Cele',
-              label: 'oszczednosci i wieksze wydatki',
+              label: 'oszczędności i większe wydatki',
             },
           ].map((stat) => (
             <Grid key={stat.label} item xs={12} sm={6} md={3}>
@@ -269,7 +295,33 @@ export const Landing: React.FC = () => {
                   background:
                     'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(246,249,252,0.95) 100%)',
                   boxShadow: '0 10px 24px rgba(10,37,64,0.12)',
+                  position: 'relative',
+                  overflow: 'hidden',
                   transition: 'transform 180ms ease, box-shadow 180ms ease',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: -20,
+                    left: '20%',
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    background:
+                      'radial-gradient(circle, rgba(21,101,192,0.20) 0%, rgba(21,101,192,0) 70%)',
+                    opacity: 0.9,
+                  },
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: -24,
+                    right: '18%',
+                    width: 76,
+                    height: 76,
+                    borderRadius: '50%',
+                    background:
+                      'radial-gradient(circle, rgba(46,214,161,0.30) 0%, rgba(46,214,161,0) 70%)',
+                    opacity: 0.85,
+                  },
                   '&:hover': {
                     transform: 'translateY(-4px)',
                     boxShadow: '0 18px 44px rgba(10,37,64,0.18)',
@@ -277,8 +329,12 @@ export const Landing: React.FC = () => {
                 }}
               >
                 <Typography
-                  variant="h4"
-                  sx={{ fontWeight: 800, color: '#1565c0' }}
+                  variant="h5"
+                  sx={{
+                    fontWeight: 800,
+                    color: '#1565c0',
+                    fontSize: { xs: '1.3rem', md: '1.45rem' },
+                  }}
                 >
                   {stat.value}
                 </Typography>
@@ -310,7 +366,7 @@ export const Landing: React.FC = () => {
                 Gotowy, aby uporządkować finanse?
               </Typography>
               <Typography sx={{ color: '#b0bec5' }}>
-                Zaloguj się i przejdź do panelu – wszystko jest już przygotowane.
+                Zaloguj się i przejdź do panelu
               </Typography>
             </Box>
             <Button
