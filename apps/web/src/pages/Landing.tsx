@@ -259,7 +259,7 @@ export const Landing: React.FC = () => {
               value: 'Cele',
               label: 'oszczednosci i wieksze wydatki',
             },
-          ]].map((stat) => (
+          ].map((stat) => (
             <Grid key={stat.label} item xs={12} sm={6} md={3}>
               <Card
                 sx={{
