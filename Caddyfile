@@ -1,0 +1,24 @@
+finsync.lifesync.pl {
+  encode gzip
+
+  handle_path /api/* {
+    reverse_proxy api:4000
+  }
+
+  @notFinsync {
+    not path /finsync/* /api/*
+  }
+  rewrite @notFinsync /finsync{uri}
+
+  reverse_proxy web:80
+}
+
+lifesync.pl, www.lifesync.pl {
+  encode gzip
+
+  handle_path /api/* {
+    reverse_proxy api:4000
+  }
+
+  reverse_proxy web:80
+}
