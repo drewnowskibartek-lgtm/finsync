@@ -1,5 +1,6 @@
 ﻿import React, { createContext, useContext, useEffect, useState } from 'react';
 import { api } from '../api/client';
+import { getAuthStorage } from '../utils/authStorage';
 import type { UserProfile } from '../api/types';
 
 interface AuthState {
@@ -30,7 +31,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
   };
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+    const storage = getAuthStorage();
+    if (storage?.getItem('accessToken')) {
       loadProfile();
     } else {
       setLoading(false);
@@ -39,21 +41,24 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
 
   const login = async (email: string, haslo: string) => {
     const res = await api.post('/auth/login', { email, haslo });
-    localStorage.setItem('accessToken', res.data.accessToken);
-    localStorage.setItem('refreshToken', res.data.refreshToken);
+    const storage = getAuthStorage();
+    storage?.setItem('accessToken', res.data.accessToken);
+    storage?.setItem('refreshToken', res.data.refreshToken);
     await loadProfile();
   };
 
   const register = async (email: string, haslo: string) => {
     const res = await api.post('/auth/register', { email, haslo });
-    localStorage.setItem('accessToken', res.data.accessToken);
-    localStorage.setItem('refreshToken', res.data.refreshToken);
+    const storage = getAuthStorage();
+    storage?.setItem('accessToken', res.data.accessToken);
+    storage?.setItem('refreshToken', res.data.refreshToken);
     await loadProfile();
   };
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    const storage = getAuthStorage();
+    storage?.removeItem('accessToken');
+    storage?.removeItem('refreshToken');
     setUser(null);
   };
 
