@@ -1,0 +1,2 @@
+ALTER TABLE "Uzytkownik"
+ADD COLUMN "walutaGlowna" TEXT NOT NULL DEFAULT 'PLN';

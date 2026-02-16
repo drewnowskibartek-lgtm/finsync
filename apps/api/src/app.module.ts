@@ -18,6 +18,7 @@ import { HealthModule } from './health/health.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { AiModule } from './ai/ai.module';
 import { SeedModule } from './seed/seed.module';
+import { SavingsModule } from './savings/savings.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { SeedModule } from './seed/seed.module';
     AiModule,
     HealthModule,
     SeedModule,
+    SavingsModule,
   ],
   providers: [
     {

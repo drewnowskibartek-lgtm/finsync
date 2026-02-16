@@ -39,13 +39,119 @@ export class ReportsService {
     return { start, end };
   }
 
+  private async sumSavingsTransfers(
+    userId: string,
+    waluta: string,
+    typ: 'DO_OSZCZEDNOSCI' | 'DO_BUDZETU',
+    range?: { start: Date; end: Date; inclusive: boolean },
+  ) {
+    const where: any = { userId, waluta, typ };
+    if (range) {
+      where.data = range.inclusive
+        ? { gte: range.start, lte: range.end }
+        : { gte: range.start, lt: range.end };
+    }
+    const sum = await this.prisma.oszczednosciTransfer.aggregate({
+      where,
+      _sum: { kwota: true },
+    });
+    return Number(sum._sum.kwota ?? 0);
+  }
+
+  private async sumSavingsGoalMovements(
+    userId: string,
+    waluta: string,
+    typ: 'WPLATA' | 'WYPLATA',
+    range?: { start: Date; end: Date; inclusive: boolean },
+  ) {
+    const where: any = {
+      typ,
+      cel: { userId, waluta },
+    };
+    if (range) {
+      where.data = range.inclusive
+        ? { gte: range.start, lte: range.end }
+        : { gte: range.start, lt: range.end };
+    }
+    const sum = await this.prisma.oszczednosciCelRuch.aggregate({
+      where,
+      _sum: { kwota: true },
+    });
+    return Number(sum._sum.kwota ?? 0);
+  }
+
+  private async getSavingsSaldo(
+    userId: string,
+    waluta: string,
+  ) {
+    const toSavings = await this.sumSavingsTransfers(
+      userId,
+      waluta,
+      'DO_OSZCZEDNOSCI',
+    );
+    const toBudget = await this.sumSavingsTransfers(
+      userId,
+      waluta,
+      'DO_BUDZETU',
+    );
+    const deposits = await this.sumSavingsGoalMovements(
+      userId,
+      waluta,
+      'WPLATA',
+    );
+    const withdrawals = await this.sumSavingsGoalMovements(
+      userId,
+      waluta,
+      'WYPLATA',
+    );
+    return toSavings - toBudget - deposits + withdrawals;
+  }
+
+  private async getSavingsNetto(
+    userId: string,
+    waluta: string,
+    range: { start: Date; end: Date; inclusive: boolean },
+  ) {
+    const toSavings = await this.sumSavingsTransfers(
+      userId,
+      waluta,
+      'DO_OSZCZEDNOSCI',
+      range,
+    );
+    const toBudget = await this.sumSavingsTransfers(
+      userId,
+      waluta,
+      'DO_BUDZETU',
+      range,
+    );
+    const deposits = await this.sumSavingsGoalMovements(
+      userId,
+      waluta,
+      'WPLATA',
+      range,
+    );
+    const withdrawals = await this.sumSavingsGoalMovements(
+      userId,
+      waluta,
+      'WYPLATA',
+      range,
+    );
+    return toSavings - toBudget - deposits + withdrawals;
+  }
+
 
   async dashboard(userId: string, od?: string, doDate?: string) {
     const range = this.buildRange(od, doDate);
+    const user = await this.prisma.uzytkownik.findUnique({
+      where: { id: userId },
+      select: { walutaGlowna: true },
+    });
+    const waluta = user?.walutaGlowna ?? 'PLN';
 
     const transactions = await this.prisma.transakcja.findMany({
       where: {
         userId,
+        waluta,
         data: range.inclusive
           ? { gte: range.start, lte: range.end }
           : { gte: range.start, lt: range.end },
@@ -63,7 +169,7 @@ export class ReportsService {
     const wskOszczednosci = przychody > 0 ? (saldo / przychody) * 100 : 0;
 
     const allTime = await this.prisma.transakcja.aggregate({
-      where: { userId },
+      where: { userId, waluta },
       _sum: { kwota: true },
     });
     const budzetLacznie = Number(allTime._sum.kwota ?? 0);
@@ -86,7 +192,7 @@ export class ReportsService {
       const s = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const e = new Date(now.getFullYear(), now.getMonth() - i + 1, 1);
       const sum = await this.prisma.transakcja.aggregate({
-        where: { userId, data: { gte: s, lt: e } },
+        where: { userId, waluta, data: { gte: s, lt: e } },
         _sum: { kwota: true },
       });
       trend.push({
@@ -94,6 +200,14 @@ export class ReportsService {
         suma: Number(sum._sum.kwota ?? 0),
       });
     }
+
+    const oszczednosciSaldo = await this.getSavingsSaldo(userId, waluta);
+    const oszczednosciNetto = await this.getSavingsNetto(userId, waluta, range);
+    const celeOszczednosci = await this.prisma.oszczednosciCel.findMany({
+      where: { userId, waluta, status: 'AKTYWNY' },
+      orderBy: { utworzono: 'desc' },
+      take: 6,
+    });
 
     return {
       przychody,
@@ -103,6 +217,23 @@ export class ReportsService {
       budzetLacznie,
       top5,
       trend,
+      oszczednosciSaldo,
+      oszczednosciNetto,
+      celeOszczednosci: celeOszczednosci.map((c) => ({
+        id: c.id,
+        nazwa: c.nazwa,
+        kwotaDocelowa: Number(c.kwotaDocelowa ?? 0),
+        kwotaZebrana: Number(c.kwotaZebrana ?? 0),
+        status: c.status,
+        procent:
+          Number(c.kwotaDocelowa ?? 0) > 0
+            ? Math.round(
+                (Number(c.kwotaZebrana ?? 0) /
+                  Number(c.kwotaDocelowa ?? 0)) *
+                  100,
+              )
+            : 0,
+      })),
     };
   }
 

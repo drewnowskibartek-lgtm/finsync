@@ -35,12 +35,28 @@ enum Czestotliwosc {
   ROCZNA
 }
 
+enum OszczednosciTransferTyp {
+  DO_OSZCZEDNOSCI
+  DO_BUDZETU
+}
+
+enum OszczednosciCelStatus {
+  AKTYWNY
+  ZAMKNIETY
+}
+
+enum OszczednosciCelRuchTyp {
+  WPLATA
+  WYPLATA
+}
+
 model Uzytkownik {
   id              String          @id @default(cuid())
   email           String          @unique
   hasloHash       String
   rola            Rola            @default(USER)
   zablokowany     Boolean         @default(false)
+  walutaGlowna    String          @default("PLN")
   utworzono       DateTime        @default(now())
   zaktualizowano  DateTime        @updatedAt
 
@@ -51,6 +67,8 @@ model Uzytkownik {
   auditLogi       AuditLog[]
   subskrypcja     Subskrypcja?
   aiUzycie        AiUzycie[]
+  oszczednosciTransfery OszczednosciTransfer[]
+  oszczednosciCele      OszczednosciCel[]
 }
 
 model Transakcja {
@@ -181,4 +199,53 @@ model AiUzycie {
 
   @@unique([userId, data])
   @@index([userId])
+}
+
+model OszczednosciTransfer {
+  id            String                  @id @default(cuid())
+  userId        String
+  typ           OszczednosciTransferTyp
+  kwota         Decimal                 @db.Decimal(14, 2)
+  waluta        String                  @default("PLN")
+  data          DateTime                @default(now())
+  notatka       String?
+  utworzono     DateTime                @default(now())
+  zaktualizowano DateTime               @updatedAt
+
+  uzytkownik    Uzytkownik              @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([waluta])
+}
+
+model OszczednosciCel {
+  id             String                 @id @default(cuid())
+  userId         String
+  nazwa          String
+  kwotaDocelowa  Decimal                @db.Decimal(14, 2)
+  kwotaZebrana   Decimal                @default(0) @db.Decimal(14, 2)
+  waluta         String                 @default("PLN")
+  status         OszczednosciCelStatus  @default(AKTYWNY)
+  utworzono      DateTime               @default(now())
+  zaktualizowano DateTime               @updatedAt
+
+  uzytkownik     Uzytkownik             @relation(fields: [userId], references: [id])
+  ruchy          OszczednosciCelRuch[]
+
+  @@index([userId])
+  @@index([waluta])
+}
+
+model OszczednosciCelRuch {
+  id         String                    @id @default(cuid())
+  celId      String
+  typ        OszczednosciCelRuchTyp
+  kwota      Decimal                   @db.Decimal(14, 2)
+  data       DateTime                  @default(now())
+  notatka    String?
+  utworzono  DateTime                  @default(now())
+
+  cel        OszczednosciCel           @relation(fields: [celId], references: [id])
+
+  @@index([celId])
 }
