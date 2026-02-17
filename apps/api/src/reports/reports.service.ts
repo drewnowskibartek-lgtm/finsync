@@ -5,6 +5,10 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ReportsService {
   constructor(private prisma: PrismaService) {}
 
+  private round2(value: number): number {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
+
   private buildRange(od?: string, doDate?: string) {
     if (od || doDate) {
       if (!od || !doDate) {
@@ -210,20 +214,20 @@ export class ReportsService {
     });
 
     return {
-      przychody,
-      wydatki,
-      saldo,
+      przychody: this.round2(przychody),
+      wydatki: this.round2(wydatki),
+      saldo: this.round2(saldo),
       wskOszczednosci,
-      budzetLacznie,
-      top5,
-      trend,
-      oszczednosciSaldo,
-      oszczednosciNetto,
+      budzetLacznie: this.round2(budzetLacznie),
+      top5: top5.map((item) => ({ ...item, suma: this.round2(item.suma) })),
+      trend: trend.map((item) => ({ ...item, suma: this.round2(item.suma) })),
+      oszczednosciSaldo: this.round2(oszczednosciSaldo),
+      oszczednosciNetto: this.round2(oszczednosciNetto),
       celeOszczednosci: celeOszczednosci.map((c) => ({
         id: c.id,
         nazwa: c.nazwa,
-        kwotaDocelowa: Number(c.kwotaDocelowa ?? 0),
-        kwotaZebrana: Number(c.kwotaZebrana ?? 0),
+        kwotaDocelowa: this.round2(Number(c.kwotaDocelowa ?? 0)),
+        kwotaZebrana: this.round2(Number(c.kwotaZebrana ?? 0)),
         status: c.status,
         procent:
           Number(c.kwotaDocelowa ?? 0) > 0
@@ -262,10 +266,10 @@ export class ReportsService {
         nazwa: g.kategoriaId
           ? (catMap.get(g.kategoriaId) ?? 'Nieznana')
           : 'Bez kategorii',
-        suma: Number(g._sum.kwota ?? 0),
+        suma: this.round2(Number(g._sum.kwota ?? 0)),
       }))
       .filter((k) => k.suma < 0)
-      .map((k) => ({ ...k, suma: Math.abs(k.suma) }));
+      .map((k) => ({ ...k, suma: this.round2(Math.abs(k.suma)) }));
 
     const budgets = await this.prisma.budzet.findMany({
       where: {
@@ -336,12 +340,12 @@ export class ReportsService {
       return {
         id: b.id,
         kategoria: b.kategoria.nazwa,
-        kwota: limit,
-        wydano,
+        kwota: this.round2(limit),
+        wydano: this.round2(wydano),
         procent,
-        carryOver,
-        available,
-        remaining,
+        carryOver: this.round2(carryOver),
+        available: this.round2(available),
+        remaining: this.round2(remaining),
       };
     });
 

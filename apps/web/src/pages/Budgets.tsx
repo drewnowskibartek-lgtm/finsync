@@ -26,6 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { api } from '../api/client';
 import { useSubscription } from '../hooks/useSubscription';
 import { useAuth } from '../auth/AuthContext';
+import { formatAmount } from '../utils/format';
 
 interface Budget {
   id: string;
@@ -262,7 +263,7 @@ export const Budgets: React.FC = () => {
                   spacing={isMobile ? 1 : 0}
                 >
                   <Typography variant="body1">
-                    {b.kategoria?.nazwa} - {b.rok}/{b.miesiac} - {b.kwota} PLN
+                    {b.kategoria?.nazwa} - {b.rok}/{b.miesiac} - {formatAmount(b.kwota)} PLN
                   </Typography>
                   {sub?.plan === 'PRO' && (
                     <Chip
@@ -282,16 +283,16 @@ export const Budgets: React.FC = () => {
                 {sub?.plan === 'PRO' && (
                   <>
                     <Typography variant="body2" color="text.secondary">
-                      Wydano: {adv?.wydano ?? 0} PLN ({procent}%)
+                      Wydano: {formatAmount(adv?.wydano ?? 0)} PLN ({procent}%)
                       {adv?.carryOver && adv.carryOver > 0 && (
-                        <> • przeniesione: {adv.carryOver} PLN</>
+                        <> • przeniesione: {formatAmount(adv.carryOver)} PLN</>
                       )}
                       {adv?.available !== undefined &&
                         adv?.remaining !== undefined && (
                           <>
                             {' '}
-                            • dostępne: {adv.available} PLN • pozostało:{' '}
-                            {adv.remaining} PLN
+                            • dostępne: {formatAmount(adv.available)} PLN • pozostało:{' '}
+                            {formatAmount(adv.remaining)} PLN
                           </>
                         )}
                     </Typography>

@@ -23,6 +23,7 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
+import { formatAmount, formatPercent } from '../utils/format';
 
 export const Dashboard: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -129,14 +130,14 @@ export const Dashboard: React.FC = () => {
 
       <Grid container spacing={2}>
         {[
-          { label: 'Przychody', value: data?.przychody ?? 0 },
-          { label: 'Wydatki', value: data?.wydatki ?? 0 },
-          { label: 'Saldo', value: data?.saldo ?? 0 },
+          { label: 'Przychody', value: `${formatAmount(data?.przychody ?? 0)} PLN` },
+          { label: 'Wydatki', value: `${formatAmount(data?.wydatki ?? 0)} PLN` },
+          { label: 'Saldo', value: `${formatAmount(data?.saldo ?? 0)} PLN` },
           {
             label: 'Wskaźnik oszczędności',
-            value: `${(data?.wskOszczednosci ?? 0).toFixed(1)}%`,
+            value: `${formatPercent(data?.wskOszczednosci ?? 0, 1)}%`,
           },
-          { label: 'Budżet', value: data?.budzetLacznie ?? 0 },
+          { label: 'Budżet', value: `${formatAmount(data?.budzetLacznie ?? 0)} PLN` },
         ].map((item) => (
           <Grid item xs={12} sm={6} md={3} key={item.label}>
             <Card>
@@ -163,8 +164,12 @@ export const Dashboard: React.FC = () => {
                   <LineChart data={data?.trend ?? []}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="miesiac" />
-                    <YAxis />
-                    <Tooltip />
+                    <YAxis tickFormatter={(value) => formatAmount(Number(value))} />
+                    <Tooltip
+                      formatter={(value: number | string) =>
+                        `${formatAmount(Number(value))} PLN`
+                      }
+                    />
                     <Line type="monotone" dataKey="suma" stroke="#1565c0" />
                   </LineChart>
                 </ResponsiveContainer>
@@ -183,8 +188,12 @@ export const Dashboard: React.FC = () => {
                   <BarChart data={data?.top5 ?? []}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="nazwa" />
-                    <YAxis />
-                    <Tooltip />
+                    <YAxis tickFormatter={(value) => formatAmount(Number(value))} />
+                    <Tooltip
+                      formatter={(value: number | string) =>
+                        `${formatAmount(Number(value))} PLN`
+                      }
+                    />
                     <Bar dataKey="suma" fill="#2ed6a1" />
                   </BarChart>
                 </ResponsiveContainer>

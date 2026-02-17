@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { api } from '../api/client';
 import { useSubscription } from '../hooks/useSubscription';
 import { useAuth } from '../auth/AuthContext';
+import { formatAmount } from '../utils/format';
 
 interface RecurringItem {
   id: string;
@@ -193,7 +194,7 @@ export const Recurring: React.FC = () => {
                 spacing={isMobile ? 1 : 0}
               >
                 <Typography variant="body1">
-                  {r.odbiorca} - {r.kwota} PLN - {r.czestotliwosc} - następna:{' '}
+                  {r.odbiorca} - {formatAmount(r.kwota)} PLN - {r.czestotliwosc} - następna:{' '}
                   {r.nastepnaData?.slice(0, 10)}
                 </Typography>
                 <Stack direction="row" spacing={1}>

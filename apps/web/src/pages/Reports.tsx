@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { api } from '../api/client';
 import { useSubscription } from '../hooks/useSubscription';
+import { formatAmount } from '../utils/format';
 
 interface AdvancedReport {
   kategorie: { nazwa: string; suma: number }[];
@@ -147,7 +148,7 @@ export const Reports: React.FC = () => {
                 </Typography>
                 {advanced.kategorie.map((k) => (
                   <Typography key={k.nazwa} variant="body2">
-                    {k.nazwa}: {k.suma} PLN
+                    {k.nazwa}: {formatAmount(k.suma)} PLN
                   </Typography>
                 ))}
               </CardContent>
@@ -171,15 +172,15 @@ export const Reports: React.FC = () => {
                           : 'text.primary'
                     }
                   >
-                    {b.kategoria}: {b.wydano}/{b.kwota} PLN ({b.procent}%)
+                    {b.kategoria}: {formatAmount(b.wydano)}/{formatAmount(b.kwota)} PLN ({b.procent}%)
                     {b.carryOver && b.carryOver > 0 && (
-                      <> • przeniesione: {b.carryOver} PLN</>
+                      <> • przeniesione: {formatAmount(b.carryOver)} PLN</>
                     )}
                     {b.available !== undefined && b.remaining !== undefined && (
                       <>
                         {' '}
-                        • dostępne: {b.available} PLN • pozostało:{' '}
-                        {b.remaining} PLN
+                        • dostępne: {formatAmount(b.available)} PLN • pozostało:{' '}
+                        {formatAmount(b.remaining)} PLN
                       </>
                     )}
                   </Typography>
