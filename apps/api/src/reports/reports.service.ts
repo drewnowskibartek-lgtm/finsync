@@ -217,7 +217,7 @@ export class ReportsService {
       przychody: this.round2(przychody),
       wydatki: this.round2(wydatki),
       saldo: this.round2(saldo),
-      wskOszczednosci,
+      wskOszczednosci: this.round2(wskOszczednosci),
       budzetLacznie: this.round2(budzetLacznie),
       top5: top5.map((item) => ({ ...item, suma: this.round2(item.suma) })),
       trend: trend.map((item) => ({ ...item, suma: this.round2(item.suma) })),
