@@ -1,18 +1,26 @@
+# Kanoniczny adres aplikacji FinSync:
+#   https://lifesync.pl/finsync/
+# Subdomena finsync.lifesync.pl przekierowuje na kanoniczny URL,
+# żeby uniknąć ładowania chunków JS między różnymi originami (CORS).
 finsync.lifesync.pl {
-  encode gzip
+  route {
+    handle_path /api/* {
+      reverse_proxy api:4000
+    }
 
-  handle_path /api/* {
-    reverse_proxy api:4000
+    @finsyncPath path /finsync*
+    redir @finsyncPath https://lifesync.pl{uri} 308
+
+    @otherPaths {
+      not path /api/* /finsync*
+    }
+    redir @otherPaths https://lifesync.pl/finsync{uri} 308
   }
-
-  @notFinsync {
-    not path /finsync/* /api/*
-  }
-  rewrite @notFinsync /finsync{uri}
-
-  reverse_proxy web:80
 }
 
+# Główna domena LifeSync:
+# - /finsync/ -> aplikacja FinSync
+# - /api/* -> backend API
 lifesync.pl, www.lifesync.pl {
   encode gzip
 

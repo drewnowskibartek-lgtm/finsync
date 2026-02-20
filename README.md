@@ -11,6 +11,14 @@ Wszystko po polsku, multi-user, RBAC, Stripe Billing, feature gating w backendzi
 - `apps/web` – React + MUI
 - `docs/ERD.md` – diagram ERD
 
+## Produkcja – domeny (OVH)
+- Kanoniczny URL aplikacji: `https://lifesync.pl/finsync/`
+- Subdomena `https://finsync.lifesync.pl` przekierowuje (308) do `https://lifesync.pl/finsync/`
+- API produkcyjne: `https://lifesync.pl/api/...`
+
+Dlaczego tak:
+- Jeden origin dla SPA i chunków JS zapobiega błędom dynamic import/CORS.
+
 ## Konfiguracja
 Skopiuj pliki `.env.example`:
 
@@ -102,6 +110,13 @@ npm run dev
 ```
 
 UI: `http://localhost:3000`
+
+## Deploy OVH – checklista po wdrożeniu
+1. `https://lifesync.pl/finsync/` -> `200`
+2. `https://lifesync.pl/finsync/login` -> `200`
+3. `https://finsync.lifesync.pl/` -> `308` na `https://lifesync.pl/finsync/`
+4. `https://lifesync.pl/finsync/assets/...js` -> `200` bez redirectu na inną domenę
+5. `https://lifesync.pl/api/health` -> `200`
 
 ## Prompt startowy (powrót do projektu)
 
